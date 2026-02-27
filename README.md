@@ -1,6 +1,6 @@
 # Dynamic Scenario-Driven Multi-Agent Orchestration Framework
 
-A research-oriented framework for dynamic, scenario-driven multi-agent orchestration. The system analyzes complex real-world scenarios, synthesizes specialized agent teams on-the-fly, and coordinates their execution using structured communication protocols and memory-aware strategies.
+A research-oriented framework for dynamic, scenario-driven multi-agent orchestration. The system analyzes complex real-world scenarios using LLMs, synthesizes specialized agent teams on-the-fly, resolves execution dependencies via topological sort, and coordinates their execution using memory-augmented reasoning — all visualized through a real-time interactive dashboard.
 
 ## Research Vision
 
@@ -8,331 +8,260 @@ A research-oriented framework for dynamic, scenario-driven multi-agent orchestra
 |---|---|
 | **Dynamic Agent Creation** | Runtime synthesis of role-specific agents based on LLM-driven scenario analysis |
 | **Meta-Orchestrator** | Central coordinator that decomposes scenarios, delegates tasks, and aggregates results |
-| **ACL-style Communication** | FIPA ACL-inspired structured messaging protocol for inter-agent dialogue |
-| **CTDE Strategy** | Centralized Training, Decentralized Execution — agents train with global state but execute autonomously |
-| **Memory-Aware Coordination** | Short-term working memory and long-term vector-backed knowledge persistence |
-| **System-Level Evaluation** | Quantitative metrics for task completion, communication efficiency, and coordination overhead |
+| **Memory-Augmented Reasoning** | ChromaDB + SentenceTransformers RAG pipeline for adaptive, experience-informed decisions |
+| **Dependency Resolution** | Kahn's algorithm (BFS topological sort) for safe multi-agent execution ordering |
+| **Real-Time Dashboard** | Next.js + React Flow interactive UI with SSE streaming from FastAPI backend |
+| **Multi-Model Support** | Selectable Groq LLM models (LLaMA 3.3 70B, Mixtral, Gemma 2, etc.) |
 
 ## Project Structure
 
 ```
 project/
 │
+├── api/                          # FastAPI backend (Phase 4)
+│   ├── __init__.py
+│   └── main.py                   # SSE endpoint for real-time streaming
+│
+├── frontend/                     # Next.js dashboard (Phase 4)
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── layout.tsx        # Root layout with Inter font
+│   │   │   ├── page.tsx          # Main dashboard UI
+│   │   │   └── globals.css       # Tailwind + custom styles
+│   │   └── lib/
+│   │       └── utils.ts          # Utility functions
+│   ├── package.json
+│   └── tailwind.config.ts
+│
 ├── orchestrator/
-│   └── meta_orchestrator.py
+│   └── meta_orchestrator.py      # Core pipeline with event callbacks
 │
 ├── agents/
-│   ├── base_agent.py
+│   ├── base_agent.py             # LLM-powered agent with memory context
 │   ├── agent_factory.py
 │   └── role_templates.py
 │
 ├── llm/
-│   └── llm_service.py
+│   └── llm_service.py            # Groq LLM integration + agent reasoning
 │
 ├── factory/
-│   └── agent_factory.py
+│   └── agent_factory.py          # Agent instantiation from LLM output
 │
 ├── registry/
-│   └── agent_registry.py
+│   └── agent_registry.py         # Centralized agent storage
 │
 ├── dependency/
-│   └── dependency_resolver.py
+│   └── dependency_resolver.py    # Kahn's topological sort
 │
 ├── communication/
-│   └── acl_protocol.py
+│   └── acl_protocol.py           # FIPA ACL messaging (placeholder)
 │
 ├── memory/
-│   ├── short_term.py
-│   └── long_term.py
+│   ├── embedding_service.py      # SentenceTransformers embeddings
+│   ├── vector_store.py           # ChromaDB persistent store
+│   ├── short_term_memory.py      # Session-scoped working memory
+│   ├── memory_manager.py         # RAG integration layer
+│   ├── short_term.py             # Phase 1 placeholder
+│   └── long_term.py              # Phase 1 placeholder
 │
 ├── evaluation/
-│   └── metrics.py
+│   └── metrics.py                # Performance metrics (placeholder)
 │
 ├── scenarios/
-│   └── sample_scenarios.txt
+│   └── sample_scenarios.txt      # Test scenarios
 │
 ├── utils/
-│   ├── logger.py
-│   └── config.py
+│   ├── logger.py                 # Structured logging
+│   └── config.py                 # Centralized configuration
 │
-├── main.py
+├── chroma_storage/               # ChromaDB persistent data (auto-generated)
+├── main.py                       # CLI entry point
 ├── requirements.txt
-├── .env
+├── .env                          # API keys (not committed)
 └── README.md
-```
-
-## Folder & File Reference
-
-### 📂 `orchestrator/`
-The brain of the system — coordinates the entire multi-agent pipeline.
-
-| File | Purpose |
-|------|---------|
-| `meta_orchestrator.py` | Central coordinator that receives a scenario, calls the LLM service, creates agents via the factory, resolves dependencies, executes agents in order, and aggregates results into a structured JSON response. |
-
----
-
-### 📂 `agents/`
-Defines what an agent *is* and how it behaves.
-
-| File | Purpose |
-|------|---------|
-| `base_agent.py` | The `BaseAgent` class — every dynamically created agent is an instance of this. Holds `name`, `role`, `responsibilities`, `dependencies`, `status`, and an `execute()` method that logs task completion and returns a structured result. |
-| `agent_factory.py` | *(Phase 1 placeholder)* Reserved for original agent factory design. Superseded by `factory/agent_factory.py` in Phase 2. |
-| `role_templates.py` | *(Placeholder)* Will store reusable role templates (e.g., "planner", "executor") for LLM-powered role inference in future phases. |
-
----
-
-### 📂 `llm/`
-Handles all communication with external language models.
-
-| File | Purpose |
-|------|---------|
-| `llm_service.py` | `LLMService` class that sends the scenario to Groq (via OpenAI-compatible API) with a structured system prompt. Parses the LLM's JSON response, extracts agent designs, and validates the schema (name, role, responsibilities, dependencies). Handles markdown code fences and malformed output gracefully. |
-
----
-
-### 📂 `factory/`
-Responsible for turning LLM output into live agent objects.
-
-| File | Purpose |
-|------|---------|
-| `agent_factory.py` | `create_agent()` function that takes a single agent config dictionary (from the LLM) and instantiates a `BaseAgent` with the correct name, role, responsibilities, and dependencies. |
-
----
-
-### 📂 `registry/`
-Centralized storage for all agents created during a scenario run.
-
-| File | Purpose |
-|------|---------|
-| `agent_registry.py` | `AgentRegistry` class with `register_agent()`, `get_agent()`, and `list_agents()` methods. Backed by a dictionary for O(1) lookup by agent name. Prevents duplicate registrations. |
-
----
-
-### 📂 `dependency/`
-Determines the correct execution order for agents.
-
-| File | Purpose |
-|------|---------|
-| `dependency_resolver.py` | `DependencyResolver` class that builds a directed acyclic graph (DAG) from agent dependency declarations and performs **Kahn's algorithm** (BFS topological sort) to compute execution order. Raises a `ValueError` if circular dependencies are detected. Gracefully skips external dependencies not in the agent set. |
-
----
-
-### 📂 `communication/`
-*(Placeholder for future phases)*
-
-| File | Purpose |
-|------|---------|
-| `acl_protocol.py` | Will implement FIPA ACL-style structured messaging (INFORM, REQUEST, PROPOSE, etc.) for inter-agent communication. |
-
----
-
-### 📂 `memory/`
-Semantic memory layer — persistent execution memory + session state.
-
-| File | Purpose |
-|------|---------|
-| `embedding_service.py` | Singleton `EmbeddingService` using SentenceTransformers (`all-MiniLM-L6-v2`). Converts text to dense vector embeddings for semantic similarity search. Model loaded once and reused. |
-| `vector_store.py` | `VectorStore` wrapping `chromadb.PersistentClient` at `./chroma_storage`. Stores execution traces with metadata (scenario, timestamp) and retrieves semantically similar past executions via `retrieve_similar()`. |
-| `short_term_memory.py` | `ShortTermMemory` — pure in-memory dict storing agent outputs and intermediate state for a single session. Cleared between runs. |
-| `memory_manager.py` | `MemoryManager` — core integration layer. `retrieve_context()` fetches relevant past traces before execution. `save_execution_trace()` embeds and stores completed runs. Abstracts away ChromaDB/embeddings from the orchestrator. |
-| `short_term.py` | *(Phase 1 placeholder)* Original placeholder for working memory. |
-| `long_term.py` | *(Phase 1 placeholder)* Original placeholder for vector-backed persistence. |
-
----
-
-### 📂 `evaluation/`
-*(Placeholder for future phases)*
-
-| File | Purpose |
-|------|---------|
-| `metrics.py` | Will compute system-level performance metrics: task completion rate, communication efficiency, agent utilization, coordination overhead, and adaptability score. |
-
----
-
-### 📂 `scenarios/`
-Test data for the framework.
-
-| File | Purpose |
-|------|---------|
-| `sample_scenarios.txt` | Example scenario descriptions (urban search & rescue, collaborative research, supply chain disruption) for testing the orchestration pipeline. |
-
----
-
-### 📂 `utils/`
-Shared utilities used across all components.
-
-| File | Purpose |
-|------|---------|
-| `logger.py` | `setup_logger()` function that creates loggers with console + file output (`logs/system.log`). Format: `[timestamp] [LEVEL] [component] message`. Supports INFO, DEBUG, ERROR levels. |
-| `config.py` | `Config` class with project constants: name, version, phase, LLM provider/model, API key, embedding model, ChromaDB storage path and collection name (loaded from `.env` via `python-dotenv`). |
-
----
-
-### 📄 Root Files
-
-| File | Purpose |
-|------|---------|
-| `main.py` | Entry point — prints the banner, accepts scenario input from the user, calls `MetaOrchestrator.execute()`, and prints the structured JSON response. |
-| `requirements.txt` | Python dependencies (`python-dotenv`, `openai`, `chromadb`, `sentence-transformers`, `numpy`). |
-| `.env` | Stores API keys (e.g., `GROQ_API_KEY`). **Not committed to version control.** |
-| `README.md` | This file — project documentation, architecture overview, and implementation status. |
-
-## Quick Start
-
-### Prerequisites
-- Python 3.9+
-- Groq API key (set in `.env`)
-
-### Installation
-
-```bash
-pip install -r requirements.txt
-```
-
-### Configuration
-
-Create a `.env` file in the project root:
-```
-GROQ_API_KEY=your_groq_api_key_here
-```
-
-### Running
-
-```bash
-python main.py
-```
-
-You will see:
-
-```
-================================================================
-  Dynamic Scenario-Driven Multi-Agent Orchestration Framework
-  Phase 2 – Dynamic Agent Synthesis Active
-================================================================
-
-Enter scenario:
-```
-
-After entering a scenario (e.g., "Massive fire outbreak in metro station"), the system:
-1. Sends the scenario to the LLM for agent design
-2. Dynamically creates the proposed agents
-3. Resolves dependency-based execution order
-4. Executes agents in order
-5. Returns structured JSON results:
-
-```json
-{
-  "scenario": "Massive fire outbreak in metro station",
-  "agents_created": 4,
-  "execution_order": [
-    "Fire Suppression Agent",
-    "Police Coordination Agent",
-    "Medical Response Agent",
-    "Evacuation Management Agent"
-  ],
-  "results": [
-    {
-      "agent": "Fire Suppression Agent",
-      "status": "completed",
-      "summary": "..."
-    }
-  ]
-}
 ```
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────┐
-│              Meta-Orchestrator              │
-│  (memory → LLM → agents → execute → save) │
-├──────────┬──────────┬──────────────────────┤
-│  LLM     │  Agent   │  Dependency          │
-│  Service │  Factory │  Resolver            │
-├──────────┴──────────┴──────────────────────┤
-│            Agent Registry                   │
-├─────────────────────────────────────────────┤
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐    │
-│  │ Agent A  │ │ Agent B  │ │ Agent N  │    │
-│  │ (LLM +   │ │ (LLM +   │ │ (LLM +   │    │
-│  │ memory)  │ │ memory)  │ │ memory)  │    │
-│  └──────────┘ └──────────┘ └──────────┘    │
-├─────────────────────────────────────────────┤
-│           Memory Manager                    │
-│  ┌─────────────┐  ┌──────────────────────┐  │
-│  │ Short-Term  │  │  Vector Store        │  │
-│  │ (session)   │  │  (ChromaDB +         │  │
-│  │             │  │   SentenceTransformers│  │
-│  └─────────────┘  └──────────────────────┘  │
-├─────────────────────────────────────────────┤
-│         Future: ACL & Metrics               │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                    Next.js Frontend (React Flow)             │
+│   Pipeline Progress · Agent Graph · Memory Panel · Logs     │
+├──────────────────────────────────────────────────────────────┤
+│                  Server-Sent Events (SSE)                    │
+├──────────────────────────────────────────────────────────────┤
+│                    FastAPI Backend                            │
+│              /api/orchestrate?scenario=...&model=...         │
+├──────────────────────────────────────────────────────────────┤
+│                    Meta-Orchestrator                          │
+│      (memory → LLM → agents → resolve → execute → save)     │
+├──────────┬──────────┬──────────┬─────────────────────────────┤
+│  LLM     │  Agent   │  Depend. │  Agent                     │
+│  Service │  Factory │  Resolver│  Registry                   │
+├──────────┴──────────┴──────────┴─────────────────────────────┤
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐                   │
+│  │ Agent A  │  │ Agent B  │  │ Agent N  │   (LLM + Memory)  │
+│  └──────────┘  └──────────┘  └──────────┘                   │
+├──────────────────────────────────────────────────────────────┤
+│                    Memory Manager                            │
+│  ┌─────────────┐  ┌─────────────────────────────────────┐   │
+│  │ Short-Term  │  │  Vector Store (ChromaDB +            │   │
+│  │ (session)   │  │  SentenceTransformers all-MiniLM-L6) │   │
+│  └─────────────┘  └─────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────┘
 ```
 
+## Quick Start
+
+### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- Groq API key ([console.groq.com](https://console.groq.com))
+
+### 1. Clone & Configure
+
+```bash
+# Create .env file
+echo "GROQ_API_KEY=your_groq_api_key_here" > .env
+```
+
+### 2. Install Python Dependencies
+
+```bash
+python -m pip install python-dotenv openai chromadb sentence-transformers fastapi uvicorn sse-starlette
+```
+
+### 3. Install Frontend Dependencies
+
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+### 4. Run the Backend (Terminal 1)
+
+```bash
+python -m uvicorn api.main:app --port 8000
+```
+
+### 5. Run the Frontend (Terminal 2)
+
+```bash
+cd frontend && npm run dev
+```
+
+### 6. Open Dashboard
+
+Navigate to **http://localhost:3000** and enter a scenario.
+
+### CLI Mode (without frontend)
+
+```bash
+python main.py
+```
+
+## Frontend Dashboard Features
+
+The interactive dashboard provides real-time visibility into the orchestration pipeline:
+
+| Feature | Description |
+|---------|-------------|
+| **Pipeline Progress Bar** | 6-step animated progress indicator (Initialize → Memory → Agents → Dependencies → Execute → Complete) |
+| **Memory Retrieval Panel** | Shows ChromaDB vector search results with RAG context injection labels |
+| **Agent Dependency Graph** | Large, interactive React Flow graph with drag, zoom, and **hover tooltips** showing responsibilities, dependencies, and execution results |
+| **Topological Order Chain** | Visual representation of Kahn's algorithm output |
+| **Agent Reasoning Log** | Timeline of LLM reasoning outputs with tracing beam animation |
+| **Model Selector** | Dropdown to choose Groq models (LLaMA 3.3 70B, LLaMA 3.1 8B, Mixtral, Gemma 2) |
+| **Completion Summary** | Stats card showing agents synthesized, executed, and trace saved |
+
+## Supported Groq Models
+
+| Model | Context | Best For |
+|-------|---------|----------|
+| LLaMA 3.3 70B Versatile | 128K | Complex scenarios (recommended) |
+| LLaMA 3.1 8B Instant | 128K | Fast iteration & testing |
+| LLaMA 3 70B | 8K | Strong reasoning |
+| LLaMA 3 8B | 8K | Lightweight tasks |
+| Gemma 2 9B | 8K | Balanced performance |
+| Mixtral 8x7B | 32K | Large context scenarios |
+
+## Folder & File Reference
+
+### 📂 `api/` — FastAPI Backend
+| File | Purpose |
+|------|---------|
+| `main.py` | SSE endpoint `/api/orchestrate` that runs `MetaOrchestrator` in a background thread and streams real-time events (status, memory_retrieved, agents_designed, dependency_resolved, agent_executing, agent_completed, orchestration_completed) to the frontend. Supports `model` query parameter for runtime LLM selection. |
+
+### 📂 `frontend/` — Next.js Dashboard
+| File | Purpose |
+|------|---------|
+| `src/app/page.tsx` | Main React component with SSE client, React Flow graph, pipeline progress bar, agent hover tooltips, model selector, and execution log |
+| `src/app/layout.tsx` | Root layout with Inter font via `next/font/google` |
+| `src/app/globals.css` | Tailwind CSS v4 config with custom animations |
+
+### 📂 `orchestrator/`
+| File | Purpose |
+|------|---------|
+| `meta_orchestrator.py` | Core pipeline: retrieve memory → LLM agent design → create agents → register → resolve dependencies → execute with memory context → save trace. Accepts `event_callback` for SSE streaming. |
+
+### 📂 `agents/`
+| File | Purpose |
+|------|---------|
+| `base_agent.py` | `BaseAgent` with LLM-powered `execute()` that receives memory context and delegates reasoning to `LLMService.reason_as_agent()` |
+
+### 📂 `llm/`
+| File | Purpose |
+|------|---------|
+| `llm_service.py` | Groq integration with structured system prompt for agent design. Includes `reason_as_agent()` for per-agent LLM reasoning with memory context. |
+
+### 📂 `memory/`
+| File | Purpose |
+|------|---------|
+| `embedding_service.py` | Singleton SentenceTransformers (`all-MiniLM-L6-v2`) |
+| `vector_store.py` | ChromaDB persistent client for execution trace storage/retrieval |
+| `short_term_memory.py` | In-memory session state |
+| `memory_manager.py` | RAG integration: `retrieve_context()` + `save_execution_trace()` |
+
+### 📂 `dependency/`
+| File | Purpose |
+|------|---------|
+| `dependency_resolver.py` | Kahn's algorithm (BFS topological sort) with circular dependency detection |
+
 ---
 
-## 🛠️ Phase 1 Implementation Status
+## Implementation Status
 
-### ✅ Implemented in Phase 1
+### ✅ Phase 1 — Foundational Architecture
+- Modular project structure with logging, config, and entry point
+- Base Agent abstraction and placeholder modules
 
-- Modular research-grade project architecture
-- Meta-Orchestrator skeleton (scenario reception and structured logging)
-- Base Agent abstraction (`receive`, `act`, `send` interface)
-- Structured logging framework (console + file with `[timestamp] [LEVEL] [component]` format)
-- Execution entry point (`main.py`)
-- Placeholder modules aligned with research roadmap
+### ✅ Phase 2 — Dynamic Agent Synthesis & LLM Integration
+- LLM Service with Groq API for scenario analysis
+- Dynamic agent creation from LLM JSON output
+- Agent Registry, Factory, and Dependency Resolver
+- Full Meta-Orchestrator pipeline
 
----
+### ✅ Phase 3 — Memory-Augmented Intelligence (RAG)
+- SentenceTransformers embeddings + ChromaDB vector store
+- Memory Manager with context retrieval and trace storage
+- LLM-driven per-agent reasoning with memory context
+- Adaptive behavior across runs via semantic similarity
 
-## � Phase 2 Implementation Status
+### ✅ Phase 4 — Interactive Dashboard & API
+- FastAPI backend with SSE real-time streaming
+- Next.js + Tailwind CSS + Framer Motion frontend
+- React Flow interactive agent dependency graph with hover tooltips
+- Pipeline progress visualization (6-step animated bar)
+- Multi-model selector (6 Groq LLM models)
+- Topological execution order visualization
+- Agent reasoning timeline with tracing beam
 
-### ✅ Implemented in Phase 2
-
-- **LLM Service** — Groq integration via OpenAI-compatible API for scenario analysis
-- **Dynamic BaseAgent** — Runtime agent class with `name`, `role`, `responsibilities`, `dependencies`, `execute()`
-- **AgentFactory** — `create_agent()` instantiates agents from LLM JSON output
-- **AgentRegistry** — Centralized agent storage with `register`, `get`, `list` operations
-- **DependencyResolver** — Topological sort (Kahn's algorithm) with circular dependency detection
-- **Meta-Orchestrator** — Full pipeline: scenario → LLM → create → register → resolve → execute → results
-- **Structured prompt engineering** for reliable JSON agent design output
-
-### 🔲 Not Implemented Yet (as of Phase 2)
-
-- ACL-style structured messaging
-- Vector database integration → ✅ Implemented in Phase 3
-- Evaluation metrics computation
-- Multi-turn agent communication
-
-> Phase 2 delivers fully dynamic, LLM-driven agent synthesis where the number and type of agents is determined entirely by the scenario at runtime.
-
----
-
-## 🧠 Phase 3 Implementation Status — Memory-Augmented Intelligence
-
-Phase 3 transforms the system from **reactive** to **adaptive**. Agents now learn from past executions and use retrieval-augmented reasoning to produce more intelligent, context-aware responses.
-
-### ✅ Implemented in Phase 3
-
-- **Embedding Service** — Singleton `SentenceTransformers` (`all-MiniLM-L6-v2`) for semantic text embedding
-- **Vector Store** — Local persistent `ChromaDB` at `./chroma_storage` for storing and retrieving execution traces
-- **Short-Term Memory** — In-memory session state tracking agent outputs within a single run
-- **Memory Manager** — Core integration layer: `retrieve_context()` before execution, `save_execution_trace()` after completion
-- **LLM-Driven Agent Reasoning** — Each agent calls Groq LLM with memory context + role + responsibilities (no hardcoded behavior)
-- **Memory-Augmented Orchestrator** — Full pipeline: retrieve memory → LLM → create → register → resolve → execute with memory → save trace
-- **Adaptive Behavior** — System improves across runs by referencing semantically similar past scenarios
-
-### 🔲 Not Implemented Yet
-
-- ACL-style structured messaging
-- CTDE coordination logic
-- Evaluation metrics computation
-- Multi-turn agent communication
-
-> Phase 3 enables retrieval-augmented agent reasoning. Each execution trace is embedded and stored in ChromaDB. On subsequent runs, semantically similar past traces are retrieved and injected into agent prompts, enabling adaptive, experience-informed behavior.
-
----
+### 🔲 Planned
+- FIPA ACL-style structured inter-agent messaging
+- CTDE coordination strategy
+- Quantitative evaluation metrics
+- Multi-turn agent dialogue
 
 ## Research Roadmap
 
@@ -341,7 +270,19 @@ Phase 3 transforms the system from **reactive** to **adaptive**. Agents now lear
 | **Phase 1** | Foundational Architecture Setup | ✅ Complete |
 | **Phase 2** | Dynamic Agent Synthesis & LLM Integration | ✅ Complete |
 | **Phase 3** | Memory Integration & RAG Reasoning | ✅ Complete |
-| **Phase 4** | ACL Messaging & Evaluation Pipeline | 🔲 Planned |
+| **Phase 4** | Interactive Dashboard & API | ✅ Complete |
+| **Phase 5** | ACL Messaging & Evaluation Pipeline | 🔲 Planned |
+
+## Tech Stack
+
+| Layer | Technologies |
+|-------|-------------|
+| **Backend** | Python, FastAPI, Uvicorn, SSE-Starlette |
+| **LLM** | Groq API (OpenAI-compatible), LLaMA 3.3 70B |
+| **Memory** | ChromaDB, SentenceTransformers (all-MiniLM-L6-v2) |
+| **Frontend** | Next.js 16, React, TypeScript, Tailwind CSS v4 |
+| **Visualization** | React Flow, Framer Motion, Lucide Icons |
+| **Algorithms** | Kahn's Topological Sort, Retrieval-Augmented Generation |
 
 ## License
 

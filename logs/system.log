@@ -4070,3 +4070,475 @@ Agents: Emergency Operator, Ambulance Di...
 [2026-02-27 12:47:11] [INFO] [VectorStore] Stored execution trace 'cf92b844-05b9-4293-8448-d46c0c4d4b9c' (2407 chars, 384-dim embedding).
 [2026-02-27 12:47:11] [INFO] [MemoryManager] Execution trace saved (id=cf92b844-05b9-4293-8448-d46c0c4d4b9c, 2407 chars).
 [2026-02-27 12:47:11] [INFO] [MetaOrchestrator] Orchestration complete — 5 agent(s) executed, memory context entries used: 3.
+[2026-02-27 22:18:38] [INFO] [FastAPI_Server] Received request for scenario: there is a fire at station and lots of people are injured , help needed, model: llama-3.3-70b-versatile
+[2026-02-27 22:18:38] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:18:38] [INFO] [AgentRegistry] Agent Registry initialized.
+[2026-02-27 22:18:39] [INFO] [EmbeddingService] Loading embedding model: all-MiniLM-L6-v2
+[2026-02-27 22:18:49] [INFO] [EmbeddingService] Embedding model loaded successfully.
+[2026-02-27 22:18:49] [INFO] [VectorStore] Initializing ChromaDB at: /Users/adityapratapsingh/Documents/Minor Project/chroma_storage
+[2026-02-27 22:18:50] [INFO] [VectorStore] ChromaDB collection 'agent_execution_memory' ready (22 existing entries).
+[2026-02-27 22:18:50] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:18:50] [INFO] [MemoryManager] Memory Manager initialized.
+[2026-02-27 22:18:50] [INFO] [MetaOrchestrator] Meta-Orchestrator initialized (Phase 3 — Memory-Augmented).
+[2026-02-27 22:18:50] [INFO] [MetaOrchestrator] Scenario received: there is a fire at station and lots of people are injured , help needed
+[2026-02-27 22:18:50] [INFO] [MetaOrchestrator] Step 1 — Retrieving memory context...
+[2026-02-27 22:18:50] [INFO] [MemoryManager] Retrieving memory context for scenario...
+[2026-02-27 22:18:50] [DEBUG] [EmbeddingService] Generating embedding for text (71 chars).
+[2026-02-27 22:18:51] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:18:51] [INFO] [VectorStore] Retrieved 3 similar execution(s) for query.
+[2026-02-27 22:18:51] [DEBUG] [VectorStore]   Match 1: Scenario: fire in noida sector 45 , many people got injured needed immediate help
+Agents: EmergencyR...
+[2026-02-27 22:18:51] [DEBUG] [VectorStore]   Match 2: Scenario: Fire at sector 45 a Noida Needed immediate evacuation and medic
+Agents: EmergencyResponder...
+[2026-02-27 22:18:51] [DEBUG] [VectorStore]   Match 3: Scenario: accident in city
+Agents: Emergency Caller, Dispatcher, Ambulance Team, Fire Department, Po...
+[2026-02-27 22:18:51] [INFO] [MemoryManager] Memory context retrieved: 3 relevant trace(s).
+[2026-02-27 22:18:51] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:18:51] [DEBUG] [MemoryManager] Short-term memory session initialized.
+[2026-02-27 22:18:51] [INFO] [MetaOrchestrator] Step 2 — Calling LLM for scenario analysis...
+[2026-02-27 22:18:51] [INFO] [LLMService] Sending scenario to LLM: there is a fire at station and lots of people are injured , help needed
+[2026-02-27 22:18:51] [ERROR] [FastAPI_Server] Orchestration failed: Traceback (most recent call last):
+  File "/Users/adityapratapsingh/Documents/Minor Project/api/main.py", line 68, in run_orchestrator
+    orchestrator.execute(scenario, event_callback=event_callback)
+  File "/Users/adityapratapsingh/Documents/Minor Project/orchestrator/meta_orchestrator.py", line 77, in execute
+    agent_configs: List[Dict[str, Any]] = self.llm_service.analyze_scenario(
+  File "/Users/adityapratapsingh/Documents/Minor Project/llm/llm_service.py", line 99, in analyze_scenario
+    response = self.client.chat.completions.create(
+  File "/opt/anaconda3/envs/myenv/lib/python3.10/site-packages/openai/_utils/_utils.py", line 286, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/anaconda3/envs/myenv/lib/python3.10/site-packages/openai/resources/chat/completions/completions.py", line 1204, in create
+    return self._post(
+  File "/opt/anaconda3/envs/myenv/lib/python3.10/site-packages/openai/_base_client.py", line 1297, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+  File "/opt/anaconda3/envs/myenv/lib/python3.10/site-packages/openai/_base_client.py", line 1070, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.AuthenticationError: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+
+[2026-02-27 22:21:48] [INFO] [FastAPI_Server] Received request for scenario: there is a fire at station and lots of people are injured , help needed, model: llama-3.3-70b-versatile
+[2026-02-27 22:21:48] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:21:48] [INFO] [AgentRegistry] Agent Registry initialized.
+[2026-02-27 22:21:48] [INFO] [EmbeddingService] Loading embedding model: all-MiniLM-L6-v2
+[2026-02-27 22:21:53] [INFO] [EmbeddingService] Embedding model loaded successfully.
+[2026-02-27 22:21:53] [INFO] [VectorStore] Initializing ChromaDB at: /Users/adityapratapsingh/Documents/Minor Project/chroma_storage
+[2026-02-27 22:21:53] [INFO] [VectorStore] ChromaDB collection 'agent_execution_memory' ready (22 existing entries).
+[2026-02-27 22:21:53] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:21:53] [INFO] [MemoryManager] Memory Manager initialized.
+[2026-02-27 22:21:53] [INFO] [MetaOrchestrator] Meta-Orchestrator initialized (Phase 3 — Memory-Augmented).
+[2026-02-27 22:21:53] [INFO] [MetaOrchestrator] Scenario received: there is a fire at station and lots of people are injured , help needed
+[2026-02-27 22:21:53] [INFO] [MetaOrchestrator] Step 1 — Retrieving memory context...
+[2026-02-27 22:21:53] [INFO] [MemoryManager] Retrieving memory context for scenario...
+[2026-02-27 22:21:53] [DEBUG] [EmbeddingService] Generating embedding for text (71 chars).
+[2026-02-27 22:21:53] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:21:53] [INFO] [VectorStore] Retrieved 3 similar execution(s) for query.
+[2026-02-27 22:21:53] [DEBUG] [VectorStore]   Match 1: Scenario: fire in noida sector 45 , many people got injured needed immediate help
+Agents: EmergencyR...
+[2026-02-27 22:21:53] [DEBUG] [VectorStore]   Match 2: Scenario: Fire at sector 45 a Noida Needed immediate evacuation and medic
+Agents: EmergencyResponder...
+[2026-02-27 22:21:53] [DEBUG] [VectorStore]   Match 3: Scenario: accident in city
+Agents: Emergency Caller, Dispatcher, Ambulance Team, Fire Department, Po...
+[2026-02-27 22:21:53] [INFO] [MemoryManager] Memory context retrieved: 3 relevant trace(s).
+[2026-02-27 22:21:53] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:21:53] [DEBUG] [MemoryManager] Short-term memory session initialized.
+[2026-02-27 22:21:53] [INFO] [MetaOrchestrator] Step 2 — Calling LLM for scenario analysis...
+[2026-02-27 22:21:53] [INFO] [LLMService] Sending scenario to LLM: there is a fire at station and lots of people are injured , help needed
+[2026-02-27 22:21:54] [DEBUG] [LLMService] Raw LLM response: {
+  "agents": [
+    {
+      "name": "Emergency Responder",
+      "role": "Coordinator",
+      "responsibilities": ["Assess situation", "Call for backup"],
+      "dependencies": []
+    },
+    {
+      "name": "Paramedic",
+      "role": "Medical Aid",
+      "responsibilities": ["Treat injuries", "Provide first aid"],
+      "dependencies": ["Emergency Responder"]
+    },
+    {
+      "name": "Firefighter",
+      "role": "Fire Suppression",
+      "responsibilities": ["Extinguish fire", "Rescue trapped people"],
+      "dependencies": ["Emergency Responder"]
+    },
+    {
+      "name": "Ambulance Driver",
+      "role": "Transportation",
+      "responsibilities": ["Transport injured to hospital"],
+      "dependencies": ["Paramedic"]
+    },
+    {
+      "name": "Hospital Coordinator",
+      "role": "Medical Facility",
+      "responsibilities": ["Prepare hospital for incoming patients"],
+      "dependencies": ["Ambulance Driver"]
+    }
+  ]
+}
+[2026-02-27 22:21:54] [INFO] [LLMService] LLM proposed 5 agent(s).
+[2026-02-27 22:21:54] [INFO] [MetaOrchestrator] Step 3 — Creating agents dynamically...
+[2026-02-27 22:21:54] [INFO] [Agent:Emergency Responder] Agent created — role='Coordinator', responsibilities=['Assess situation', 'Call for backup'], dependencies=[]
+[2026-02-27 22:21:54] [INFO] [AgentFactory] Created agent: Emergency Responder (role=Coordinator)
+[2026-02-27 22:21:54] [INFO] [AgentRegistry] Registered agent: Emergency Responder
+[2026-02-27 22:21:54] [INFO] [Agent:Paramedic] Agent created — role='Medical Aid', responsibilities=['Treat injuries', 'Provide first aid'], dependencies=['Emergency Responder']
+[2026-02-27 22:21:54] [INFO] [AgentFactory] Created agent: Paramedic (role=Medical Aid)
+[2026-02-27 22:21:54] [INFO] [AgentRegistry] Registered agent: Paramedic
+[2026-02-27 22:21:54] [INFO] [Agent:Firefighter] Agent created — role='Fire Suppression', responsibilities=['Extinguish fire', 'Rescue trapped people'], dependencies=['Emergency Responder']
+[2026-02-27 22:21:54] [INFO] [AgentFactory] Created agent: Firefighter (role=Fire Suppression)
+[2026-02-27 22:21:54] [INFO] [AgentRegistry] Registered agent: Firefighter
+[2026-02-27 22:21:54] [INFO] [Agent:Ambulance Driver] Agent created — role='Transportation', responsibilities=['Transport injured to hospital'], dependencies=['Paramedic']
+[2026-02-27 22:21:54] [INFO] [AgentFactory] Created agent: Ambulance Driver (role=Transportation)
+[2026-02-27 22:21:54] [INFO] [AgentRegistry] Registered agent: Ambulance Driver
+[2026-02-27 22:21:54] [INFO] [Agent:Hospital Coordinator] Agent created — role='Medical Facility', responsibilities=['Prepare hospital for incoming patients'], dependencies=['Ambulance Driver']
+[2026-02-27 22:21:54] [INFO] [AgentFactory] Created agent: Hospital Coordinator (role=Medical Facility)
+[2026-02-27 22:21:54] [INFO] [AgentRegistry] Registered agent: Hospital Coordinator
+[2026-02-27 22:21:54] [INFO] [MetaOrchestrator] Step 4 — Resolving dependency execution order...
+[2026-02-27 22:21:54] [INFO] [DependencyResolver] Resolving dependencies for 5 agents.
+[2026-02-27 22:21:54] [INFO] [DependencyResolver] Execution order resolved: ['Emergency Responder', 'Paramedic', 'Firefighter', 'Ambulance Driver', 'Hospital Coordinator']
+[2026-02-27 22:21:54] [INFO] [MetaOrchestrator] Step 5 — Executing agents with memory context...
+[2026-02-27 22:21:54] [INFO] [Agent:Emergency Responder] Executing with context keys: ['scenario']
+[2026-02-27 22:21:54] [INFO] [Agent:Emergency Responder] Memory context entries: 3
+[2026-02-27 22:21:54] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:21:54] [INFO] [LLMService] Generating LLM reasoning for agent: Emergency Responder
+[2026-02-27 22:21:57] [DEBUG] [LLMService] Agent 'Emergency Responder' raw LLM response: {
+  "agent": "Emergency Responder",
+  "status": "completed",
+  "summary": "Assessed situation as a fire at the station with multiple injuries, alerted Fire Department, Police Department, and Ambulance Service for immediate backup support, notified nearby hospitals to prepare for patient arrival, and activated emergency protocol to ensure timely response and allocation of resources"
+}
+[2026-02-27 22:21:57] [INFO] [Agent:Emergency Responder] Execution complete — Assessed situation as a fire at the station with multiple injuries, alerted Fire Department, Police Department, and Ambulance Service for immediate backup support, notified nearby hospitals to prepare for patient arrival, and activated emergency protocol to ensure timely response and allocation of resources
+[2026-02-27 22:21:57] [DEBUG] [ShortTermMemory] Stored output for agent: Emergency Responder
+[2026-02-27 22:21:57] [INFO] [Agent:Paramedic] Executing with context keys: ['scenario', 'Emergency Responder']
+[2026-02-27 22:21:57] [INFO] [Agent:Paramedic] Memory context entries: 3
+[2026-02-27 22:21:57] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:21:57] [INFO] [LLMService] Generating LLM reasoning for agent: Paramedic
+[2026-02-27 22:21:57] [DEBUG] [LLMService] Agent 'Paramedic' raw LLM response: {
+  "agent": "Paramedic",
+  "status": "completed",
+  "summary": "Assessed the situation, provided first aid to 20 injured individuals, treated 10 patients with severe burns, administered oxygen to 5 people with smoke inhalation, and stabilized 8 critically injured patients for transportation to nearby hospitals"
+}
+[2026-02-27 22:21:57] [INFO] [Agent:Paramedic] Execution complete — Assessed the situation, provided first aid to 20 injured individuals, treated 10 patients with severe burns, administered oxygen to 5 people with smoke inhalation, and stabilized 8 critically injured patients for transportation to nearby hospitals
+[2026-02-27 22:21:57] [DEBUG] [ShortTermMemory] Stored output for agent: Paramedic
+[2026-02-27 22:21:57] [INFO] [Agent:Firefighter] Executing with context keys: ['scenario', 'Emergency Responder', 'Paramedic']
+[2026-02-27 22:21:57] [INFO] [Agent:Firefighter] Memory context entries: 3
+[2026-02-27 22:21:57] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:21:57] [INFO] [LLMService] Generating LLM reasoning for agent: Firefighter
+[2026-02-27 22:22:02] [DEBUG] [LLMService] Agent 'Firefighter' raw LLM response: {
+  "agent": "Firefighter",
+  "status": "completed",
+  "summary": "Dispatched 5 fire trucks to the station, extinguished the fire, rescued 20 people trapped in the vicinity, provided medical aid to 10 individuals with injuries, and secured the area by deploying 20 firefighters to cordon off the location"
+}
+[2026-02-27 22:22:02] [INFO] [Agent:Firefighter] Execution complete — Dispatched 5 fire trucks to the station, extinguished the fire, rescued 20 people trapped in the vicinity, provided medical aid to 10 individuals with injuries, and secured the area by deploying 20 firefighters to cordon off the location
+[2026-02-27 22:22:02] [DEBUG] [ShortTermMemory] Stored output for agent: Firefighter
+[2026-02-27 22:22:02] [INFO] [Agent:Ambulance Driver] Executing with context keys: ['scenario', 'Emergency Responder', 'Paramedic', 'Firefighter']
+[2026-02-27 22:22:02] [INFO] [Agent:Ambulance Driver] Memory context entries: 3
+[2026-02-27 22:22:02] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:22:02] [INFO] [LLMService] Generating LLM reasoning for agent: Ambulance Driver
+[2026-02-27 22:22:03] [DEBUG] [LLMService] Agent 'Ambulance Driver' raw LLM response: {
+  "agent": "Ambulance Driver",
+  "status": "completed",
+  "summary": "Dispatched 10 ambulances to the fire at the station, provided medical aid to 25 injured individuals, triaged 15 critically injured patients, transported 20 patients to nearby hospitals, and allocated medical supplies to support relief efforts"
+}
+[2026-02-27 22:22:03] [INFO] [Agent:Ambulance Driver] Execution complete — Dispatched 10 ambulances to the fire at the station, provided medical aid to 25 injured individuals, triaged 15 critically injured patients, transported 20 patients to nearby hospitals, and allocated medical supplies to support relief efforts
+[2026-02-27 22:22:03] [DEBUG] [ShortTermMemory] Stored output for agent: Ambulance Driver
+[2026-02-27 22:22:03] [INFO] [Agent:Hospital Coordinator] Executing with context keys: ['scenario', 'Emergency Responder', 'Paramedic', 'Firefighter', 'Ambulance Driver']
+[2026-02-27 22:22:03] [INFO] [Agent:Hospital Coordinator] Memory context entries: 3
+[2026-02-27 22:22:03] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:22:03] [INFO] [LLMService] Generating LLM reasoning for agent: Hospital Coordinator
+[2026-02-27 22:22:03] [DEBUG] [LLMService] Agent 'Hospital Coordinator' raw LLM response: {
+  "agent": "Hospital Coordinator",
+  "status": "completed",
+  "summary": "Activated emergency protocol, allocated 30 medical beds, 15 ICU units, and 25 medical staff to treat incoming patients, notified emergency services of hospital readiness, and prepared hospital equipment and supplies to support relief efforts"
+}
+[2026-02-27 22:22:03] [INFO] [Agent:Hospital Coordinator] Execution complete — Activated emergency protocol, allocated 30 medical beds, 15 ICU units, and 25 medical staff to treat incoming patients, notified emergency services of hospital readiness, and prepared hospital equipment and supplies to support relief efforts
+[2026-02-27 22:22:03] [DEBUG] [ShortTermMemory] Stored output for agent: Hospital Coordinator
+[2026-02-27 22:22:03] [INFO] [MetaOrchestrator] Step 6 — Saving execution trace to vector store...
+[2026-02-27 22:22:03] [DEBUG] [EmbeddingService] Generating embedding for text (1567 chars).
+[2026-02-27 22:22:04] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:22:04] [INFO] [VectorStore] Stored execution trace '59d491fa-e945-41bf-9a6d-494f76755201' (1567 chars, 384-dim embedding).
+[2026-02-27 22:22:04] [INFO] [MemoryManager] Execution trace saved (id=59d491fa-e945-41bf-9a6d-494f76755201, 1567 chars).
+[2026-02-27 22:22:04] [INFO] [MetaOrchestrator] Orchestration complete — 5 agent(s) executed, memory context entries used: 3.
+[2026-02-27 22:44:22] [INFO] [FastAPI_Server] Received request for scenario: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in its metro rail network during peak office hours., model: llama-3.3-70b-versatile
+[2026-02-27 22:44:22] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:44:22] [INFO] [AgentRegistry] Agent Registry initialized.
+[2026-02-27 22:44:22] [INFO] [EmbeddingService] Loading embedding model: all-MiniLM-L6-v2
+[2026-02-27 22:44:28] [INFO] [EmbeddingService] Embedding model loaded successfully.
+[2026-02-27 22:44:28] [INFO] [VectorStore] Initializing ChromaDB at: /Users/adityapratapsingh/Documents/Minor Project/chroma_storage
+[2026-02-27 22:44:29] [INFO] [VectorStore] ChromaDB collection 'agent_execution_memory' ready (23 existing entries).
+[2026-02-27 22:44:29] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:44:29] [INFO] [MemoryManager] Memory Manager initialized.
+[2026-02-27 22:44:29] [INFO] [MetaOrchestrator] Meta-Orchestrator initialized (Phase 3 — Memory-Augmented).
+[2026-02-27 22:44:29] [INFO] [MetaOrchestrator] Scenario received: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in its metro rail network during peak office hours.
+[2026-02-27 22:44:29] [INFO] [MetaOrchestrator] Step 1 — Retrieving memory context...
+[2026-02-27 22:44:29] [INFO] [MemoryManager] Retrieving memory context for scenario...
+[2026-02-27 22:44:29] [DEBUG] [EmbeddingService] Generating embedding for text (136 chars).
+[2026-02-27 22:44:29] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:44:29] [INFO] [VectorStore] Retrieved 3 similar execution(s) for query.
+[2026-02-27 22:44:29] [DEBUG] [VectorStore]   Match 1: Scenario: Earthquake in a metropolitan area
+Agents: Emergency Alert System, Seismic Monitoring Syste...
+[2026-02-27 22:44:29] [DEBUG] [VectorStore]   Match 2: Scenario: there is an emergency an accident happend in city
+Agents: Emergency Operator, Ambulance Di...
+[2026-02-27 22:44:29] [DEBUG] [VectorStore]   Match 3: Scenario: Earthquake damages a school building
+Agents: EmergencyResponder, DamageAssessor, ReliefCoo...
+[2026-02-27 22:44:29] [INFO] [MemoryManager] Memory context retrieved: 3 relevant trace(s).
+[2026-02-27 22:44:29] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:44:29] [DEBUG] [MemoryManager] Short-term memory session initialized.
+[2026-02-27 22:44:29] [INFO] [MetaOrchestrator] Step 2 — Calling LLM for scenario analysis...
+[2026-02-27 22:44:29] [INFO] [LLMService] Sending scenario to LLM: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in its metro rail network during peak office hours.
+[2026-02-27 22:44:30] [DEBUG] [LLMService] Raw LLM response: {
+  "agents": [
+    {
+      "name": "Network Monitor",
+      "role": "Monitoring",
+      "responsibilities": ["Detecting disruptions", "Alerting system administrators"],
+      "dependencies": []
+    },
+    {
+      "name": "System Administrator",
+      "role": "Administration",
+      "responsibilities": ["Assessing disruptions", "Coordinating response efforts"],
+      "dependencies": ["Network Monitor"]
+    },
+    {
+      "name": "Emergency Responder",
+      "role": "Response",
+      "responsibilities": ["Evacuating passengers", "Providing medical assistance"],
+      "dependencies": ["System Administrator"]
+    },
+    {
+      "name": "Passenger Informer",
+      "role": "Communication",
+      "responsibilities": ["Notifying passengers of disruptions", "Providing alternative route information"],
+      "dependencies": ["System Administrator"]
+    },
+    {
+      "name": "Route Optimizer",
+      "role": "Optimization",
+      "responsibilities": ["Re-routing trains", "Minimizing delays"],
+      "dependencies": ["System Administrator", "Passenger Informer"]
+    }
+  ]
+}
+[2026-02-27 22:44:30] [INFO] [LLMService] LLM proposed 5 agent(s).
+[2026-02-27 22:44:30] [INFO] [MetaOrchestrator] Step 3 — Creating agents dynamically...
+[2026-02-27 22:44:30] [INFO] [Agent:Network Monitor] Agent created — role='Monitoring', responsibilities=['Detecting disruptions', 'Alerting system administrators'], dependencies=[]
+[2026-02-27 22:44:30] [INFO] [AgentFactory] Created agent: Network Monitor (role=Monitoring)
+[2026-02-27 22:44:30] [INFO] [AgentRegistry] Registered agent: Network Monitor
+[2026-02-27 22:44:30] [INFO] [Agent:System Administrator] Agent created — role='Administration', responsibilities=['Assessing disruptions', 'Coordinating response efforts'], dependencies=['Network Monitor']
+[2026-02-27 22:44:30] [INFO] [AgentFactory] Created agent: System Administrator (role=Administration)
+[2026-02-27 22:44:30] [INFO] [AgentRegistry] Registered agent: System Administrator
+[2026-02-27 22:44:30] [INFO] [Agent:Emergency Responder] Agent created — role='Response', responsibilities=['Evacuating passengers', 'Providing medical assistance'], dependencies=['System Administrator']
+[2026-02-27 22:44:30] [INFO] [AgentFactory] Created agent: Emergency Responder (role=Response)
+[2026-02-27 22:44:30] [INFO] [AgentRegistry] Registered agent: Emergency Responder
+[2026-02-27 22:44:30] [INFO] [Agent:Passenger Informer] Agent created — role='Communication', responsibilities=['Notifying passengers of disruptions', 'Providing alternative route information'], dependencies=['System Administrator']
+[2026-02-27 22:44:30] [INFO] [AgentFactory] Created agent: Passenger Informer (role=Communication)
+[2026-02-27 22:44:30] [INFO] [AgentRegistry] Registered agent: Passenger Informer
+[2026-02-27 22:44:30] [INFO] [Agent:Route Optimizer] Agent created — role='Optimization', responsibilities=['Re-routing trains', 'Minimizing delays'], dependencies=['System Administrator', 'Passenger Informer']
+[2026-02-27 22:44:30] [INFO] [AgentFactory] Created agent: Route Optimizer (role=Optimization)
+[2026-02-27 22:44:30] [INFO] [AgentRegistry] Registered agent: Route Optimizer
+[2026-02-27 22:44:30] [INFO] [MetaOrchestrator] Step 4 — Resolving dependency execution order...
+[2026-02-27 22:44:30] [INFO] [DependencyResolver] Resolving dependencies for 5 agents.
+[2026-02-27 22:44:30] [INFO] [DependencyResolver] Execution order resolved: ['Network Monitor', 'System Administrator', 'Emergency Responder', 'Passenger Informer', 'Route Optimizer']
+[2026-02-27 22:44:30] [INFO] [MetaOrchestrator] Step 5 — Executing agents with memory context...
+[2026-02-27 22:44:30] [INFO] [Agent:Network Monitor] Executing with context keys: ['scenario']
+[2026-02-27 22:44:30] [INFO] [Agent:Network Monitor] Memory context entries: 3
+[2026-02-27 22:44:30] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:44:30] [INFO] [LLMService] Generating LLM reasoning for agent: Network Monitor
+[2026-02-27 22:44:32] [DEBUG] [LLMService] Agent 'Network Monitor' raw LLM response: {
+  "agent": "Network Monitor",
+  "status": "completed",
+  "summary": "Detected critical disruption in metro rail network at 8:45 AM, alerted system administrators via SMS, email, and internal notification system, and initiated protocol to assess extent of disruption, identify affected stations and lines, and notify relevant emergency services and transportation authorities to ensure timely response and minimize impact on commuters"
+}
+[2026-02-27 22:44:32] [INFO] [Agent:Network Monitor] Execution complete — Detected critical disruption in metro rail network at 8:45 AM, alerted system administrators via SMS, email, and internal notification system, and initiated protocol to assess extent of disruption, identify affected stations and lines, and notify relevant emergency services and transportation authorities to ensure timely response and minimize impact on commuters
+[2026-02-27 22:44:32] [DEBUG] [ShortTermMemory] Stored output for agent: Network Monitor
+[2026-02-27 22:44:32] [INFO] [Agent:System Administrator] Executing with context keys: ['scenario', 'Network Monitor']
+[2026-02-27 22:44:32] [INFO] [Agent:System Administrator] Memory context entries: 3
+[2026-02-27 22:44:32] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:44:32] [INFO] [LLMService] Generating LLM reasoning for agent: System Administrator
+[2026-02-27 22:44:32] [DEBUG] [LLMService] Agent 'System Administrator' raw LLM response: {
+  "agent": "System Administrator",
+  "status": "completed",
+  "summary": "Assessed metro rail network disruption, notified EmergencyResponder, MetroRailOperator, and PassengerService agents, coordinated response efforts with DamageAssessor, RescueOperationsTeam, and SupplyChainManagementSystem agents to prioritize passenger evacuation, provide medical care, restore critical utilities, and conduct thorough search and rescue operations, allocated resources such as food, water, shelter, and medical supplies, and established a temporary relief center for affected passengers, utilizing protocols from previous earthquake and accident scenarios to inform response efforts and ensure timely passenger safety"
+}
+[2026-02-27 22:44:32] [INFO] [Agent:System Administrator] Execution complete — Assessed metro rail network disruption, notified EmergencyResponder, MetroRailOperator, and PassengerService agents, coordinated response efforts with DamageAssessor, RescueOperationsTeam, and SupplyChainManagementSystem agents to prioritize passenger evacuation, provide medical care, restore critical utilities, and conduct thorough search and rescue operations, allocated resources such as food, water, shelter, and medical supplies, and established a temporary relief center for affected passengers, utilizing protocols from previous earthquake and accident scenarios to inform response efforts and ensure timely passenger safety
+[2026-02-27 22:44:32] [DEBUG] [ShortTermMemory] Stored output for agent: System Administrator
+[2026-02-27 22:44:32] [INFO] [Agent:Emergency Responder] Executing with context keys: ['scenario', 'Network Monitor', 'System Administrator']
+[2026-02-27 22:44:32] [INFO] [Agent:Emergency Responder] Memory context entries: 3
+[2026-02-27 22:44:32] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:44:32] [INFO] [LLMService] Generating LLM reasoning for agent: Emergency Responder
+[2026-02-27 22:44:38] [DEBUG] [LLMService] Agent 'Emergency Responder' raw LLM response: {
+  "agent": "Emergency Responder",
+  "status": "completed",
+  "summary": "Evacuated 500 passengers from the affected metro rail network, provided medical assistance to 20 injured individuals, and allocated medical supplies and personnel to support relief efforts, utilizing protocols from previous earthquake and accident scenarios to inform response efforts and ensure timely passenger safety"
+}
+[2026-02-27 22:44:38] [INFO] [Agent:Emergency Responder] Execution complete — Evacuated 500 passengers from the affected metro rail network, provided medical assistance to 20 injured individuals, and allocated medical supplies and personnel to support relief efforts, utilizing protocols from previous earthquake and accident scenarios to inform response efforts and ensure timely passenger safety
+[2026-02-27 22:44:38] [DEBUG] [ShortTermMemory] Stored output for agent: Emergency Responder
+[2026-02-27 22:44:38] [INFO] [Agent:Passenger Informer] Executing with context keys: ['scenario', 'Network Monitor', 'System Administrator', 'Emergency Responder']
+[2026-02-27 22:44:38] [INFO] [Agent:Passenger Informer] Memory context entries: 3
+[2026-02-27 22:44:38] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:44:38] [INFO] [LLMService] Generating LLM reasoning for agent: Passenger Informer
+[2026-02-27 22:44:39] [DEBUG] [LLMService] Agent 'Passenger Informer' raw LLM response: {
+  "agent": "Passenger Informer",
+  "status": "completed",
+  "summary": "Notified 500,000 passengers of metro rail network disruption via SMS, email, and mobile app notifications, provided alternative route information, including 10 bus routes and 5 alternative train lines, and offered real-time updates on disruption resolution progress, utilizing protocols from previous earthquake and accident scenarios to ensure timely and effective communication"
+}
+[2026-02-27 22:44:39] [INFO] [Agent:Passenger Informer] Execution complete — Notified 500,000 passengers of metro rail network disruption via SMS, email, and mobile app notifications, provided alternative route information, including 10 bus routes and 5 alternative train lines, and offered real-time updates on disruption resolution progress, utilizing protocols from previous earthquake and accident scenarios to ensure timely and effective communication
+[2026-02-27 22:44:39] [DEBUG] [ShortTermMemory] Stored output for agent: Passenger Informer
+[2026-02-27 22:44:39] [INFO] [Agent:Route Optimizer] Executing with context keys: ['scenario', 'Network Monitor', 'System Administrator', 'Emergency Responder', 'Passenger Informer']
+[2026-02-27 22:44:39] [INFO] [Agent:Route Optimizer] Memory context entries: 3
+[2026-02-27 22:44:39] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:44:39] [INFO] [LLMService] Generating LLM reasoning for agent: Route Optimizer
+[2026-02-27 22:44:41] [DEBUG] [LLMService] Agent 'Route Optimizer' raw LLM response: {
+  "agent": "Route Optimizer",
+  "status": "completed",
+  "summary": "Re-routed 25 trains, minimizing delays by 37% through dynamic re-routing, adjusted schedules, and optimized traffic flow, utilizing real-time data and lessons from previous earthquake and accident scenarios to ensure efficient and safe passenger transportation"
+}
+[2026-02-27 22:44:41] [INFO] [Agent:Route Optimizer] Execution complete — Re-routed 25 trains, minimizing delays by 37% through dynamic re-routing, adjusted schedules, and optimized traffic flow, utilizing real-time data and lessons from previous earthquake and accident scenarios to ensure efficient and safe passenger transportation
+[2026-02-27 22:44:41] [DEBUG] [ShortTermMemory] Stored output for agent: Route Optimizer
+[2026-02-27 22:44:41] [INFO] [MetaOrchestrator] Step 6 — Saving execution trace to vector store...
+[2026-02-27 22:44:41] [DEBUG] [EmbeddingService] Generating embedding for text (2336 chars).
+[2026-02-27 22:44:41] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:44:41] [INFO] [VectorStore] Stored execution trace 'f7d0db5a-cf95-4fcf-b2f9-e07d2e17ef36' (2336 chars, 384-dim embedding).
+[2026-02-27 22:44:41] [INFO] [MemoryManager] Execution trace saved (id=f7d0db5a-cf95-4fcf-b2f9-e07d2e17ef36, 2336 chars).
+[2026-02-27 22:44:41] [INFO] [MetaOrchestrator] Orchestration complete — 5 agent(s) executed, memory context entries used: 3.
+[2026-02-27 22:51:56] [INFO] [FastAPI_Server] Received request for scenario: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in its metro rail network during peak office hours., model: llama-3.3-70b-versatile
+[2026-02-27 22:51:56] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:51:56] [INFO] [AgentRegistry] Agent Registry initialized.
+[2026-02-27 22:51:56] [INFO] [EmbeddingService] Loading embedding model: all-MiniLM-L6-v2
+[2026-02-27 22:52:01] [INFO] [EmbeddingService] Embedding model loaded successfully.
+[2026-02-27 22:52:01] [INFO] [VectorStore] Initializing ChromaDB at: /Users/adityapratapsingh/Documents/Minor Project/chroma_storage
+[2026-02-27 22:52:02] [INFO] [VectorStore] ChromaDB collection 'agent_execution_memory' ready (24 existing entries).
+[2026-02-27 22:52:02] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:52:02] [INFO] [MemoryManager] Memory Manager initialized.
+[2026-02-27 22:52:02] [INFO] [MetaOrchestrator] Meta-Orchestrator initialized (Phase 3 — Memory-Augmented).
+[2026-02-27 22:52:02] [INFO] [MetaOrchestrator] Scenario received: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in its metro rail network during peak office hours.
+[2026-02-27 22:52:02] [INFO] [MetaOrchestrator] Step 1 — Retrieving memory context...
+[2026-02-27 22:52:02] [INFO] [MemoryManager] Retrieving memory context for scenario...
+[2026-02-27 22:52:02] [DEBUG] [EmbeddingService] Generating embedding for text (136 chars).
+[2026-02-27 22:52:02] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:52:02] [INFO] [VectorStore] Retrieved 3 similar execution(s) for query.
+[2026-02-27 22:52:02] [DEBUG] [VectorStore]   Match 1: Scenario: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in it...
+[2026-02-27 22:52:02] [DEBUG] [VectorStore]   Match 2: Scenario: Earthquake in a metropolitan area
+Agents: Emergency Alert System, Seismic Monitoring Syste...
+[2026-02-27 22:52:02] [DEBUG] [VectorStore]   Match 3: Scenario: there is an emergency an accident happend in city
+Agents: Emergency Operator, Ambulance Di...
+[2026-02-27 22:52:02] [INFO] [MemoryManager] Memory context retrieved: 3 relevant trace(s).
+[2026-02-27 22:52:02] [INFO] [ShortTermMemory] Short-term memory initialized.
+[2026-02-27 22:52:02] [DEBUG] [MemoryManager] Short-term memory session initialized.
+[2026-02-27 22:52:02] [INFO] [MetaOrchestrator] Step 2 — Calling LLM for scenario analysis...
+[2026-02-27 22:52:02] [INFO] [LLMService] Sending scenario to LLM: At 8:45 AM on a weekday, a major metropolitan city experiences a critical disruption in its metro rail network during peak office hours.
+[2026-02-27 22:52:04] [DEBUG] [LLMService] Raw LLM response: {
+  "agents": [
+    {
+      "name": "Network Monitor",
+      "role": "Monitoring",
+      "responsibilities": ["Detecting disruptions", "Alerting system administrators"],
+      "dependencies": []
+    },
+    {
+      "name": "System Administrator",
+      "role": "Administration",
+      "responsibilities": ["Assessing disruptions", "Coordinating response efforts"],
+      "dependencies": ["Network Monitor"]
+    },
+    {
+      "name": "Emergency Responder",
+      "role": "Response",
+      "responsibilities": ["Evacuating passengers", "Providing medical assistance"],
+      "dependencies": ["System Administrator"]
+    },
+    {
+      "name": "Passenger Informer",
+      "role": "Communication",
+      "responsibilities": ["Notifying passengers of disruptions", "Providing alternative route information"],
+      "dependencies": ["System Administrator"]
+    },
+    {
+      "name": "Route Optimizer",
+      "role": "Optimization",
+      "responsibilities": ["Re-routing trains", "Minimizing delays"],
+      "dependencies": ["System Administrator", "Passenger Informer"]
+    }
+  ]
+}
+[2026-02-27 22:52:04] [INFO] [LLMService] LLM proposed 5 agent(s).
+[2026-02-27 22:52:04] [INFO] [MetaOrchestrator] Step 3 — Creating agents dynamically...
+[2026-02-27 22:52:04] [INFO] [Agent:Network Monitor] Agent created — role='Monitoring', responsibilities=['Detecting disruptions', 'Alerting system administrators'], dependencies=[]
+[2026-02-27 22:52:04] [INFO] [AgentFactory] Created agent: Network Monitor (role=Monitoring)
+[2026-02-27 22:52:04] [INFO] [AgentRegistry] Registered agent: Network Monitor
+[2026-02-27 22:52:04] [INFO] [Agent:System Administrator] Agent created — role='Administration', responsibilities=['Assessing disruptions', 'Coordinating response efforts'], dependencies=['Network Monitor']
+[2026-02-27 22:52:04] [INFO] [AgentFactory] Created agent: System Administrator (role=Administration)
+[2026-02-27 22:52:04] [INFO] [AgentRegistry] Registered agent: System Administrator
+[2026-02-27 22:52:04] [INFO] [Agent:Emergency Responder] Agent created — role='Response', responsibilities=['Evacuating passengers', 'Providing medical assistance'], dependencies=['System Administrator']
+[2026-02-27 22:52:04] [INFO] [AgentFactory] Created agent: Emergency Responder (role=Response)
+[2026-02-27 22:52:04] [INFO] [AgentRegistry] Registered agent: Emergency Responder
+[2026-02-27 22:52:04] [INFO] [Agent:Passenger Informer] Agent created — role='Communication', responsibilities=['Notifying passengers of disruptions', 'Providing alternative route information'], dependencies=['System Administrator']
+[2026-02-27 22:52:04] [INFO] [AgentFactory] Created agent: Passenger Informer (role=Communication)
+[2026-02-27 22:52:04] [INFO] [AgentRegistry] Registered agent: Passenger Informer
+[2026-02-27 22:52:04] [INFO] [Agent:Route Optimizer] Agent created — role='Optimization', responsibilities=['Re-routing trains', 'Minimizing delays'], dependencies=['System Administrator', 'Passenger Informer']
+[2026-02-27 22:52:04] [INFO] [AgentFactory] Created agent: Route Optimizer (role=Optimization)
+[2026-02-27 22:52:04] [INFO] [AgentRegistry] Registered agent: Route Optimizer
+[2026-02-27 22:52:04] [INFO] [MetaOrchestrator] Step 4 — Resolving dependency execution order...
+[2026-02-27 22:52:04] [INFO] [DependencyResolver] Resolving dependencies for 5 agents.
+[2026-02-27 22:52:04] [INFO] [DependencyResolver] Execution order resolved: ['Network Monitor', 'System Administrator', 'Emergency Responder', 'Passenger Informer', 'Route Optimizer']
+[2026-02-27 22:52:04] [INFO] [MetaOrchestrator] Step 5 — Executing agents with memory context...
+[2026-02-27 22:52:04] [INFO] [Agent:Network Monitor] Executing with context keys: ['scenario']
+[2026-02-27 22:52:04] [INFO] [Agent:Network Monitor] Memory context entries: 3
+[2026-02-27 22:52:04] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:52:04] [INFO] [LLMService] Generating LLM reasoning for agent: Network Monitor
+[2026-02-27 22:52:04] [DEBUG] [LLMService] Agent 'Network Monitor' raw LLM response: {
+  "agent": "Network Monitor",
+  "status": "completed",
+  "summary": "Detected critical disruption in metro rail network at 8:45 AM, alerted system administrators via SMS, email, and internal notification system, and initiated protocol to assess extent of disruption, identify affected stations and lines, and notify relevant emergency services and transportation authorities to ensure timely response and minimize impact on commuters"
+}
+[2026-02-27 22:52:04] [INFO] [Agent:Network Monitor] Execution complete — Detected critical disruption in metro rail network at 8:45 AM, alerted system administrators via SMS, email, and internal notification system, and initiated protocol to assess extent of disruption, identify affected stations and lines, and notify relevant emergency services and transportation authorities to ensure timely response and minimize impact on commuters
+[2026-02-27 22:52:04] [DEBUG] [ShortTermMemory] Stored output for agent: Network Monitor
+[2026-02-27 22:52:04] [INFO] [Agent:System Administrator] Executing with context keys: ['scenario', 'Network Monitor']
+[2026-02-27 22:52:04] [INFO] [Agent:System Administrator] Memory context entries: 3
+[2026-02-27 22:52:04] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:52:04] [INFO] [LLMService] Generating LLM reasoning for agent: System Administrator
+[2026-02-27 22:52:04] [DEBUG] [LLMService] Agent 'System Administrator' raw LLM response: {
+  "agent": "System Administrator",
+  "status": "completed",
+  "summary": "Assessed metro rail network disruption, notified EmergencyResponder, MetroRailOperator, and PassengerService agents, coordinated response efforts with DamageAssessor, RescueOperationsTeam, and SupplyChainManagementSystem agents to prioritize passenger evacuation, provide medical care, restore critical utilities, and conduct thorough search and rescue operations, allocated resources such as food, water, shelter, and medical supplies, and established a temporary relief center for affected passengers"
+}
+[2026-02-27 22:52:04] [INFO] [Agent:System Administrator] Execution complete — Assessed metro rail network disruption, notified EmergencyResponder, MetroRailOperator, and PassengerService agents, coordinated response efforts with DamageAssessor, RescueOperationsTeam, and SupplyChainManagementSystem agents to prioritize passenger evacuation, provide medical care, restore critical utilities, and conduct thorough search and rescue operations, allocated resources such as food, water, shelter, and medical supplies, and established a temporary relief center for affected passengers
+[2026-02-27 22:52:04] [DEBUG] [ShortTermMemory] Stored output for agent: System Administrator
+[2026-02-27 22:52:04] [INFO] [Agent:Emergency Responder] Executing with context keys: ['scenario', 'Network Monitor', 'System Administrator']
+[2026-02-27 22:52:04] [INFO] [Agent:Emergency Responder] Memory context entries: 3
+[2026-02-27 22:52:04] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:52:04] [INFO] [LLMService] Generating LLM reasoning for agent: Emergency Responder
+[2026-02-27 22:52:05] [DEBUG] [LLMService] Agent 'Emergency Responder' raw LLM response: {
+  "agent": "Emergency Responder",
+  "status": "completed",
+  "summary": "Evacuated 500 passengers from the affected metro rail network, provided medical assistance to 20 injured individuals, allocated medical supplies and personnel to support relief efforts, and utilized protocols from previous earthquake and accident scenarios to inform response efforts and ensure timely passenger safety"
+}
+[2026-02-27 22:52:05] [INFO] [Agent:Emergency Responder] Execution complete — Evacuated 500 passengers from the affected metro rail network, provided medical assistance to 20 injured individuals, allocated medical supplies and personnel to support relief efforts, and utilized protocols from previous earthquake and accident scenarios to inform response efforts and ensure timely passenger safety
+[2026-02-27 22:52:05] [DEBUG] [ShortTermMemory] Stored output for agent: Emergency Responder
+[2026-02-27 22:52:05] [INFO] [Agent:Passenger Informer] Executing with context keys: ['scenario', 'Network Monitor', 'System Administrator', 'Emergency Responder']
+[2026-02-27 22:52:05] [INFO] [Agent:Passenger Informer] Memory context entries: 3
+[2026-02-27 22:52:05] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:52:05] [INFO] [LLMService] Generating LLM reasoning for agent: Passenger Informer
+[2026-02-27 22:52:05] [DEBUG] [LLMService] Agent 'Passenger Informer' raw LLM response: {
+  "agent": "Passenger Informer",
+  "status": "completed",
+  "summary": "Notified 500,000 passengers of metro rail network disruption via SMS, email, and mobile app notifications, provided alternative route information including 10 bus routes and 5 alternative train lines, and offered real-time updates on disruption resolution progress"
+}
+[2026-02-27 22:52:05] [INFO] [Agent:Passenger Informer] Execution complete — Notified 500,000 passengers of metro rail network disruption via SMS, email, and mobile app notifications, provided alternative route information including 10 bus routes and 5 alternative train lines, and offered real-time updates on disruption resolution progress
+[2026-02-27 22:52:05] [DEBUG] [ShortTermMemory] Stored output for agent: Passenger Informer
+[2026-02-27 22:52:05] [INFO] [Agent:Route Optimizer] Executing with context keys: ['scenario', 'Network Monitor', 'System Administrator', 'Emergency Responder', 'Passenger Informer']
+[2026-02-27 22:52:05] [INFO] [Agent:Route Optimizer] Memory context entries: 3
+[2026-02-27 22:52:05] [INFO] [LLMService] LLM Service initialized (provider=groq, model=llama-3.3-70b-versatile).
+[2026-02-27 22:52:05] [INFO] [LLMService] Generating LLM reasoning for agent: Route Optimizer
+[2026-02-27 22:52:05] [DEBUG] [LLMService] Agent 'Route Optimizer' raw LLM response: {
+  "agent": "Route Optimizer",
+  "status": "completed",
+  "summary": "Re-routed 25 trains, minimizing delays by 37% through dynamic re-routing, adjusted schedules, and optimized traffic flow, utilizing real-time data and lessons from previous metro rail network disruption scenarios to ensure efficient and safe passenger transportation"
+}
+[2026-02-27 22:52:05] [INFO] [Agent:Route Optimizer] Execution complete — Re-routed 25 trains, minimizing delays by 37% through dynamic re-routing, adjusted schedules, and optimized traffic flow, utilizing real-time data and lessons from previous metro rail network disruption scenarios to ensure efficient and safe passenger transportation
+[2026-02-27 22:52:05] [DEBUG] [ShortTermMemory] Stored output for agent: Route Optimizer
+[2026-02-27 22:52:05] [INFO] [MetaOrchestrator] Step 6 — Saving execution trace to vector store...
+[2026-02-27 22:52:05] [DEBUG] [EmbeddingService] Generating embedding for text (2095 chars).
+[2026-02-27 22:52:06] [DEBUG] [EmbeddingService] Embedding generated (dim=384).
+[2026-02-27 22:52:06] [INFO] [VectorStore] Stored execution trace '39a7fea7-7805-4a39-a0ec-616950c7192a' (2095 chars, 384-dim embedding).
+[2026-02-27 22:52:06] [INFO] [MemoryManager] Execution trace saved (id=39a7fea7-7805-4a39-a0ec-616950c7192a, 2095 chars).
+[2026-02-27 22:52:06] [INFO] [MetaOrchestrator] Orchestration complete — 5 agent(s) executed, memory context entries used: 3.
