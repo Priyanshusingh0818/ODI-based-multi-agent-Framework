@@ -1,5 +1,5 @@
 # Dynamic Scenario-Driven Multi-Agent Orchestration Framework
-
+# Adaptive orchestration new novelty
 A research-oriented framework for dynamic, scenario-driven multi-agent orchestration. The system analyzes complex real-world scenarios using LLMs, synthesizes specialized agent teams on-the-fly, resolves execution dependencies via topological sort, and coordinates their execution using memory-augmented reasoning — all visualized through a real-time interactive dashboard.
 
 ## Research Vision
@@ -53,6 +53,13 @@ project/
 ├── dependency/
 │   └── dependency_resolver.py    # Kahn's topological sort
 │
+├── execution/                    # Distributed Execution Layer (Phase 4)
+│   ├── async_executor.py         # Asyncio-based topological executor
+│   ├── message_broker.py         # Real-time ACL message brokering
+│   ├── message_schema.py         # FIPA-ACL performative schemas
+│   ├── execution_logger.py       # Centralized demo logging
+│   └── performance_monitor.py    # Latency tracking and efficiency gains
+│
 ├── communication/
 │   └── acl_protocol.py           # FIPA ACL messaging (placeholder)
 │
@@ -74,7 +81,16 @@ project/
 │   ├── logger.py                 # Structured logging
 │   └── config.py                 # Centralized configuration
 │
+├── adaptation/                   # Adaptive Learning Layer (Phase 5)
+│   ├── retrieval_engine.py       # Semantic similarity workflow retrieval
+│   ├── workflow_adapter.py       # LLM-driven workflow adaptation
+│   ├── feedback_loop.py          # Execution evaluation + CTDE feedback
+│   ├── ctde_coordinator.py       # Centralized Training, Decentralized Execution
+│   ├── dialogue_manager.py       # Multi-turn agent dialogue controller
+│   └── learning_store.py         # Persistent policy & insight storage
+│
 ├── chroma_storage/               # ChromaDB persistent data (auto-generated)
+├── learning_data/                # CTDE learned policies (auto-generated)
 ├── main.py                       # CLI entry point
 ├── requirements.txt
 ├── .env                          # API keys (not committed)
@@ -95,10 +111,10 @@ project/
 ├──────────────────────────────────────────────────────────────┤
 │                    Meta-Orchestrator                          │
 │      (memory → LLM → agents → resolve → execute → save)     │
-├──────────┬──────────┬──────────┬─────────────────────────────┤
-│  LLM     │  Agent   │  Depend. │  Agent                     │
-│  Service │  Factory │  Resolver│  Registry                   │
-├──────────┴──────────┴──────────┴─────────────────────────────┤
+├──────────┬──────────┬──────────┬──────────┬──────────────────┤
+│  LLM     │  Agent   │  Depend. │  Async   │ Agent            │
+│  Service │  Factory │  Resolver│ Executor │ Registry         │
+├──────────┴──────────┴──────────┴──────────┴──────────────────┤
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐                   │
 │  │ Agent A  │  │ Agent B  │  │ Agent N  │   (LLM + Memory)  │
 │  └──────────┘  └──────────┘  └──────────┘                   │
@@ -228,6 +244,15 @@ The interactive dashboard provides real-time visibility into the orchestration p
 |------|---------|
 | `dependency_resolver.py` | Kahn's algorithm (BFS topological sort) with circular dependency detection |
 
+### 📂 `execution/` (Phase 4)
+| File | Purpose |
+|------|---------|
+| `async_executor.py` | Core engine identifying parallel execution levels and routing execution via `asyncio.gather`. Maintains strict DAG correctness while boosting efficiency. |
+| `message_broker.py` | Async queue system enabling real-time Agent Communication Language (ACL) event-driven messaging. |
+| `message_schema.py` | Defines `Message` format with performatives (`INFORM`, `REQUEST`, `FAIL`), sender, receiver, and timestamps. |
+| `execution_logger.py` | Generates a clean, transparent log of pipeline events, group parallelism, and inter-agent messages. |
+| `performance_monitor.py` | Tracks total execution time vs sequential estimation, calculating efficiency gain metrics. |
+
 ---
 
 ## Implementation Status
@@ -248,20 +273,20 @@ The interactive dashboard provides real-time visibility into the orchestration p
 - LLM-driven per-agent reasoning with memory context
 - Adaptive behavior across runs via semantic similarity
 
-### ✅ Phase 4 — Interactive Dashboard & API
-- FastAPI backend with SSE real-time streaming
-- Next.js + Tailwind CSS + Framer Motion frontend
-- React Flow interactive agent dependency graph with hover tooltips
-- Pipeline progress visualization (6-step animated bar)
-- Multi-model selector (6 Groq LLM models)
-- Topological execution order visualization
-- Agent reasoning timeline with tracing beam
+### ✅ Phase 4 — Distributed Execution & Interactive Dashboard
+- **Execution Layer:** `async_executor` running decoupled multi-agent parallel workflows using topological graph levels.
+- **Agent Communication (ACL):** Real-time message broking for Inter-Agent messaging via `message_broker.py`.
+- **Fault-Tolerance:** Agents emit `FAIL` ACL signals handling internal LLM exceptions cleanly without pipeline crashes.
+- **Monitoring:** Performance efficiency metrics and clear `execution_logger` trace generation.
+- **Frontend Dashboard:** Next.js + Tailwind CSS with SSE streaming, React Flow graph with hover tooltips, multi-agent pipeline progress visualization.
 
-### 🔲 Planned
-- FIPA ACL-style structured inter-agent messaging
-- CTDE coordination strategy
-- Quantitative evaluation metrics
-- Multi-turn agent dialogue
+### ✅ Phase 5 — Adaptive Learning, CTDE & Multi-Agent Dialogue
+- **CTDE (Centralized Training, Decentralized Execution):** System learns globally from all workflow executions, then provides decentralized policy hints to individual agents. Policies include best practices, common failures, and optimal patterns stored via `learning_store.py`.
+- **Multi-Turn Agent Dialogue:** Agents no longer respond in single shots — dependent agent pairs engage in iterative conversations (REQUEST → INFORM → REQUEST → CONFIRM) via `dialogue_manager.py` to collaboratively refine decisions.
+- **Enhanced Feedback Loop:** `feedback_loop.py` now produces structured evaluation summaries (success rate, slow/fast agents, recommendations) and feeds data into the CTDE coordinator for centralized training.
+- **Learning Store:** Persistent JSON-based storage (`learning_data/policies.json`) for CTDE policies and execution insights, enabling continuous improvement across runs.
+- **Policy-Aware Workflow Adaptation:** `workflow_adapter.py` now incorporates CTDE policy hints into LLM prompts when adapting past workflows to new scenarios.
+- **Enriched Agent Reasoning:** `base_agent.py` receives CTDE policy hints and dialogue history as additional LLM context for smarter, experience-informed execution.
 
 ## Research Roadmap
 
@@ -270,8 +295,8 @@ The interactive dashboard provides real-time visibility into the orchestration p
 | **Phase 1** | Foundational Architecture Setup | ✅ Complete |
 | **Phase 2** | Dynamic Agent Synthesis & LLM Integration | ✅ Complete |
 | **Phase 3** | Memory Integration & RAG Reasoning | ✅ Complete |
-| **Phase 4** | Interactive Dashboard & API | ✅ Complete |
-| **Phase 5** | ACL Messaging & Evaluation Pipeline | 🔲 Planned |
+| **Phase 4** | Distributed Execution & Interactive Dashboard | ✅ Complete |
+| **Phase 5** | CTDE Strategy, Multi-Turn Dialogue & Adaptive Learning | ✅ Complete |
 
 ## Tech Stack
 
@@ -280,10 +305,14 @@ The interactive dashboard provides real-time visibility into the orchestration p
 | **Backend** | Python, FastAPI, Uvicorn, SSE-Starlette |
 | **LLM** | Groq API (OpenAI-compatible), LLaMA 3.3 70B |
 | **Memory** | ChromaDB, SentenceTransformers (all-MiniLM-L6-v2) |
+| **Learning** | CTDE Coordinator, Learning Store (JSON), Feedback Loop |
 | **Frontend** | Next.js 16, React, TypeScript, Tailwind CSS v4 |
 | **Visualization** | React Flow, Framer Motion, Lucide Icons |
-| **Algorithms** | Kahn's Topological Sort, Retrieval-Augmented Generation |
+| **Algorithms** | Kahn's Topological Sort, Retrieval-Augmented Generation, CTDE |
 
 ## License
 
 This project is developed for academic and research purposes.
+
+python -m uvicorn api.main:app --port 8000
+

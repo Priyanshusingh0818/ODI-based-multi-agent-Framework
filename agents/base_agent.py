@@ -48,6 +48,9 @@ class BaseAgent:
         self.responsibilities = responsibilities
         self.dependencies = dependencies
         self.status: str = "pending"
+        # Phase 5: CTDE policy hints and dialogue history
+        self.policy_hints: Dict[str, Any] = {}
+        self.dialogue_history: List[Dict[str, Any]] = []
         self.logger = setup_logger(f"Agent:{self.name}")
         self.logger.info(
             f"Agent created — role='{self.role}', "
@@ -65,6 +68,8 @@ class BaseAgent:
         Calls the LLM service with the agent's role, responsibilities,
         current scenario, and relevant past execution memories to produce
         an intelligent, context-aware response.
+        
+        Reads any waiting messages via ACL message broker and logs output.
 
         Args:
             context: Contextual information from the orchestrator,
@@ -80,21 +85,54 @@ class BaseAgent:
 
         self.status = "running"
         self.logger.info(f"Executing with context keys: {list(context.keys())}")
-        self.logger.info(f"Memory context entries: {len(memory_context)}")
+        
+        # Read incoming messages if bound
+        if hasattr(self, "incoming_messages") and self.incoming_messages:
+            self.logger.info(f"Incoming messages received: {len(self.incoming_messages)}")
+            for msg in self.incoming_messages:
+                self.logger.info(f"← [From {msg.sender}] {msg.performative}: {msg.content}")
 
-        # Use LLM for reasoning — no hardcoded behavior
-        llm_service = LLMService()
-        result = llm_service.reason_as_agent(
-            name=self.name,
-            role=self.role,
-            responsibilities=self.responsibilities,
-            scenario=context.get("scenario", ""),
-            memory_context=memory_context,
-        )
+        try:
+            # Use LLM for reasoning — no hardcoded behavior
+            llm_service = LLMService()
+            
+            # Phase 5: Enrich memory context with CTDE policy hints
+            enriched_context = list(memory_context)
+            if self.policy_hints:
+                policy_text = (
+                    f"CTDE Policy for {self.role}: "
+                    f"Best practices: {', '.join(self.policy_hints.get('best_practices', [])[:3])}. "
+                    f"Known failures: {', '.join(self.policy_hints.get('common_failures', [])[:2])}. "
+                    f"Optimal patterns: {', '.join(self.policy_hints.get('optimal_patterns', [])[:2])}."
+                )
+                enriched_context.append(policy_text)
+                self.logger.info(f"CTDE policy hints injected into reasoning context.")
+            
+            # Phase 5: Include dialogue history if available
+            if self.dialogue_history:
+                dialogue_text = f"Dialogue insights: {len(self.dialogue_history)} turns of coordination."
+                enriched_context.append(dialogue_text)
+            
+            result = llm_service.reason_as_agent(
+                name=self.name,
+                role=self.role,
+                responsibilities=self.responsibilities,
+                scenario=context.get("scenario", ""),
+                memory_context=enriched_context,
+            )
 
-        self.status = "completed"
-        self.logger.info(f"Execution complete — {result.get('summary', 'done')}")
-        return result
+            self.status = "completed"
+            self.logger.info(f"Execution complete — {result.get('summary', 'done')[:50]}...")
+            return result
+            
+        except Exception as e:
+            self.status = "failed"
+            self.logger.error(f"Agent execution failed: {e}")
+            return {
+                "agent": self.name,
+                "status": "failed",
+                "summary": f"Failed due to error: {str(e)}"
+            }
 
     def __repr__(self) -> str:
         return (

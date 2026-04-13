@@ -124,3 +124,41 @@ class VectorStore:
             )
 
         return documents
+
+    def retrieve_experiences(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
+        """Retrieve full experience objects (documents, metadata, distances)."""
+        if self.collection.count() == 0:
+            return []
+            
+        query_embedding = self.embedding_service.embed(query)
+        actual_k = min(top_k, self.collection.count())
+        
+        results = self.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=actual_k,
+        )
+        
+        experiences = []
+        if results.get("documents") and results["documents"][0]:
+            docs = results["documents"][0]
+            metadatas = results.get("metadatas", [[]])[0]
+            distances = results.get("distances", [[]])[0]
+            ids = results.get("ids", [[]])[0]
+            
+            for i in range(len(docs)):
+                exp = {
+                    "id": ids[i],
+                    "document": docs[i],
+                    "metadata": metadatas[i] if min(len(metadatas), len(docs)) > i else {},
+                    "distance": distances[i] if min(len(distances), len(docs)) > i else 0.0
+                }
+                experiences.append(exp)
+                
+        return experiences
+        
+    def update_execution_metadata(self, execution_id: str, metadata: Dict[str, Any]) -> None:
+        """Update the metadata of an existing execution trace."""
+        self.collection.update(
+            ids=[execution_id],
+            metadatas=[metadata]
+        )

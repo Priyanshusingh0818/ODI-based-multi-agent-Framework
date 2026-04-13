@@ -57,17 +57,24 @@ class MemoryManager:
         self,
         scenario: str,
         agents: List[str],
+        agent_configs: List[Dict[str, Any]],
         results: List[Dict[str, Any]],
+        outcome: str = "success",
+        performance_metrics: Dict[str, Any] = None,
     ) -> None:
         """Save a complete execution trace to persistent memory.
 
         Combines scenario, agent list, and results into a single text
-        block, embeds it, and stores it in the vector database.
+        block, embeds it, and stores the full topology and performance 
+        in the semantic vector database metadata for future adaptation.
 
         Args:
             scenario: The executed scenario text.
             agents: List of agent names in execution order.
+            agent_configs: The raw agent configurations forming the DAG.
             results: List of per-agent result dictionaries.
+            outcome: "success" or "failure".
+            performance_metrics: Dict metrics from execution layer.
         """
         # Build combined trace text
         results_text = "\n".join(
@@ -82,11 +89,24 @@ class MemoryManager:
         )
 
         execution_id = str(uuid.uuid4())
+        
+        import json
+        
+        # Serialize the workflow graph properties purely for DB metadata payload
+        metadata = {
+            "scenario": scenario,
+            "outcome": outcome,
+            "confidence_score": 1.0, # Initial generic confidence
+            "workflow_graph": json.dumps(agent_configs),
+        }
+        
+        if performance_metrics:
+            metadata["performance_metrics"] = json.dumps(performance_metrics)
 
         self.vector_store.store_execution(
             execution_id=execution_id,
             content=trace_text,
-            metadata={"scenario": scenario},
+            metadata=metadata,
         )
 
         self.logger.info(

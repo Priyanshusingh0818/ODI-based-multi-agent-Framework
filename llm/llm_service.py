@@ -268,3 +268,16 @@ Return only JSON. No explanation, no markdown, no code fences."""
                 "status": "completed",
                 "summary": f"{name} ({role}) completed: {', '.join(responsibilities)}",
             }
+
+    def adapt_graph(self, prompt: str) -> str:
+        """Call LLM directly to adapt an existing workflow graph."""
+        self.logger.info("Calling LLM to adapt workflow graph based on new scenario...")
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": "You are a JSON-only API. Only output raw JSON arrays."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3,
+        )
+        return response.choices[0].message.content.strip()
